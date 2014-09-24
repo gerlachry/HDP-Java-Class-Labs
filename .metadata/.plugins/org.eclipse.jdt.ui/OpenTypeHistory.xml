@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<typeInfoHistroy>
-<typeInfo handle="=CustomSort/\/home\/train\/.gradle\/caches\/artifacts-23\/filestore\/org.apache.hadoop\/hadoop-common\/2.2.0\/jar\/a840350e4a1f5483f949ec5e72cfa2c6b2b3cf94\/hadoop-common-2.2.0.jar&lt;org.apache.hadoop.io(WritableComparable.class[WritableComparable" modifiers="1537" timestamp="1386214097000"/>
-<typeInfo handle="=CustomSort/\/home\/train\/.gradle\/caches\/artifacts-23\/filestore\/org.apache.hadoop\/hadoop-common\/2.2.0\/jar\/a840350e4a1f5483f949ec5e72cfa2c6b2b3cf94\/hadoop-common-2.2.0.jar&lt;org.apache.hadoop.io(Writable.class[Writable" modifiers="1537" timestamp="1386214097000"/>
-<typeInfo handle="=CustomSort/\/home\/train\/.gradle\/caches\/artifacts-23\/filestore\/org.apache.hadoop\/hadoop-common\/2.2.0\/jar\/a840350e4a1f5483f949ec5e72cfa2c6b2b3cf94\/hadoop-common-2.2.0.jar&lt;org.apache.hadoop.io(WritableComparator.class[WritableComparator" modifiers="33" timestamp="1386214097000"/>
-<typeInfo handle="=MovingAverage/\/home\/train\/.gradle\/caches\/artifacts-23\/filestore\/org.apache.hadoop\/hadoop-mapreduce-client-core\/2.2.0\/jar\/4be274d45f35543d3c4dd8e2bfed2cebc56696c7\/hadoop-mapreduce-client-core-2.2.0.jar&lt;org.apache.hadoop.mapreduce.lib.input(FileInputFormat.class[FileInputFormat" modifiers="1057" timestamp="1386214134000"/>
-</typeInfoHistroy>

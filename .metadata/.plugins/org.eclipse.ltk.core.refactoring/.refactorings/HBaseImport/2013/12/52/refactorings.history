@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Move 2 elements to &apos;HBaseImport/src/main/java/hbase&apos;&#x0A;- Original project: &apos;HBaseImport&apos;&#x0A;- Destination element: &apos;HBaseImport/src/main/java/hbase&apos;&#x0A;- Original elements:&#x0A;     StockImporter.java&#x0A;     StockConstants.java&#x0A;- Update references to refactored element" description="Move files" destination="/src\/main\/java&lt;hbase" element1="StockImporter.java" element2="StockConstants.java" files="2" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1387724764988" units="0" version="1.0"/>
-</session>

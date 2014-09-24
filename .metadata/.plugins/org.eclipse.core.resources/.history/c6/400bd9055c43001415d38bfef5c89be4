@@ -1,7 +1,0 @@
-package customsort;
-
-import org.apache.hadoop.io.WritableComparable;
-
-public class Stock implements WritableComparable<T> {
-
-}

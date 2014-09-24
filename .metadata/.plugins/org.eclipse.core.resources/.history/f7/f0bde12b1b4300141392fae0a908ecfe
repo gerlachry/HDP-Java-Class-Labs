@@ -1,5 +1,0 @@
-project.ext.mainclass = 'wordcount.WordCountJob'
-project.ext.archiveName = 'wordcount.jar'
-
-apply from: '/home/train/labs/build.gradle'
-

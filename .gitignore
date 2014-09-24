@@ -1,0 +1,6 @@
+.metadata*
+*.class
+*.gradle*
+*.jar
+*eclipse*
+*build*

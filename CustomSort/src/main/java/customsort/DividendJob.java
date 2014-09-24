@@ -13,9 +13,12 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.Reducer.Context;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.LazyOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.util.Tool;
@@ -58,7 +61,15 @@ public class DividendJob extends Configured implements Tool {
 	public static class DividendGrowthReducer extends Reducer<Stock, DoubleWritable, NullWritable, DividendChange> {
 		private NullWritable outputKey = NullWritable.get();
 		private DividendChange outputValue = new DividendChange();
+		private MultipleOutputs<NullWritable, DividendChange> mos;
 		
+		@Override
+		protected void setup(Context context) throws IOException,
+				InterruptedException {
+			super.setup(context);
+			mos = new MultipleOutputs<NullWritable, DividendChange>(context);
+		}
+
 		@Override
 		protected void reduce(Stock key, Iterable<DoubleWritable> values, Context context)
 				throws IOException, InterruptedException {
@@ -70,11 +81,24 @@ public class DividendJob extends Configured implements Tool {
 					outputValue.setSymbol(key.getSymbol());
 					outputValue.setDate(key.getDate());
 					outputValue.setChange(growth);
-					context.write(outputKey, outputValue);
+					//context.write(outputKey, outputValue);
+					if(growth > 0) { 
+						mos.write("positive",outputKey,outputValue,"pos");
+					} else { 
+						mos.write("negative",outputKey,outputValue,"neg");
+					}
 					previousDividend = currentDividend;
 				}
 			}
 		}
+
+		@Override
+		protected void cleanup(Context context)
+				throws IOException, InterruptedException {
+			super.cleanup(context);
+			mos.close();
+		}
+		
 	}
 
 	@Override
@@ -91,7 +115,7 @@ public class DividendJob extends Configured implements Tool {
 		job.setMapperClass(DividendGrowthMapper.class);
 		job.setReducerClass(DividendGrowthReducer.class);
 		job.setInputFormatClass(TextInputFormat.class);
-		job.setOutputFormatClass(TextOutputFormat.class);
+		//job.setOutputFormatClass(DividendOutputFormat.class);
 		job.setOutputKeyClass(NullWritable.class);
 		job.setOutputValueClass(DividendChange.class);
 		job.setMapOutputKeyClass(Stock.class);
@@ -99,8 +123,17 @@ public class DividendJob extends Configured implements Tool {
 		job.setPartitionerClass(StockPartitioner.class);
 		job.setGroupingComparatorClass(StockGroupComparator.class);
 		
+		// used same namedOutputs when writing in reducer
+		MultipleOutputs.addNamedOutput(job, "positive", TextOutputFormat.class,
+				NullWritable.class,
+				DividendChange.class); 
+		MultipleOutputs.addNamedOutput(job, "negative",
+				TextOutputFormat.class, NullWritable.class, DividendChange.class);
+		
 		job.setNumReduceTasks(3);
-
+		// prevent empty reducer files from being written
+		LazyOutputFormat.setOutputFormatClass(job, TextOutputFormat.class);
+		
 		return job.waitForCompletion(true)?0:1;
 
 	}

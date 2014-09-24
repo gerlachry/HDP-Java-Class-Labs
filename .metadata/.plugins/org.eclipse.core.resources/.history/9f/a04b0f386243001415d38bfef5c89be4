@@ -1,7 +1,0 @@
-package average;
-
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-
-public class StockInputFormat extends FileInputFormat<K, V> {
-
-}

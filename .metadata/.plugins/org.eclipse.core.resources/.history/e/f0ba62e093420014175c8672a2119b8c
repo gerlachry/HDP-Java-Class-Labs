@@ -1,7 +1,0 @@
-package wordcount;
-
-import org.apache.hadoop.mapreduce.Reducer;
-
-public class WordCountReducer extends Reducer<KEYIN, VALUEIN, KEYOUT, VALUEOUT> {
-
-}

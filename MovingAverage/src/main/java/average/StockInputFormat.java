@@ -55,10 +55,12 @@ public class StockInputFormat extends FileInputFormat<Stock, StockPrices> {
 			if(line.getLength() == 0){
 				return false;
 			}
-			String[] values = StringUtils.split(line.toString(), ',');
-			if(values[0].equals("exchange")){
-				return false;
+			if (line.toString().startsWith("exchange")){
+				// skipping header record
+				currentPos += lineReader.readLine(line);
 			}
+			
+			String[] values = StringUtils.split(line.toString(), ',');
 			key.setSymbol(values[1]);
 			key.setDate(values[2]);
 			System.out.println("3 = " + values[3]);

@@ -18,6 +18,8 @@ import org.apache.hadoop.util.ToolRunner;
 
 public class MovingAveragePreprocessor extends Configured implements Tool {
 
+	public enum Counters {MAP, COMBINE, REDUCE}
+	
 	public static class PreprocessorMapper extends Mapper<Stock, StockPrices, Stock, DoubleWritable> {
 		private DoubleWritable outputValue = new DoubleWritable();
 		
@@ -26,6 +28,7 @@ public class MovingAveragePreprocessor extends Configured implements Tool {
 				throws IOException, InterruptedException {
 			outputValue.set(value.getClose());
 			context.write(key, outputValue);
+			context.getCounter(Counters.MAP).increment(1);
 		}
 		
 		
@@ -61,7 +64,11 @@ public class MovingAveragePreprocessor extends Configured implements Tool {
 		job.setOutputValueClass(DoubleWritable.class);
 		job.setMapOutputKeyClass(Stock.class);
 		job.setMapOutputValueClass(DoubleWritable.class);
-
+		
+		Path [] inPaths = FileInputFormat.getInputPaths(job);
+		for(Path p : inPaths) {
+			System.out.println("inPaths " + p.toString());
+		}
 		job.setNumReduceTasks(1);
 		
 		return job.waitForCompletion(true) ? 0 : 1;
