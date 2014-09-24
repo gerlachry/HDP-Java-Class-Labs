@@ -1,0 +1,5 @@
+project.ext.mainclass = ''
+project.ext.archiveName = '.jar'
+
+apply from: '/home/train/labs/build.gradle'
+

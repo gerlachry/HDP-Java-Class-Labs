@@ -1,0 +1,5 @@
+project.ext.mainclass = 'bloom.StockDividendFilter'
+project.ext.archiveName = 'bloomfilter.jar'
+
+apply from: '/home/train/labs/build.gradle'
+

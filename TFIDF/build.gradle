@@ -1,0 +1,5 @@
+project.ext.mainclass = 'tfidf.TfIdfDriver'
+project.ext.archiveName = 'tfidf.jar'
+
+apply from: '/home/train/labs/build.gradle'
+

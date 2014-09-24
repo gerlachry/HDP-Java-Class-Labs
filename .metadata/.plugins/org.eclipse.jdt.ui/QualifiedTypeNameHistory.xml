@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.apache.commons.lang.StringUtils"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.MRJobConfig"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.io.compress.SnappyCodec"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.io.compress.CompressionCodec"/>
+<fullyQualifiedTypeName name="hbasemr.StockConstants"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.lib.reduce.IntSumReducer"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.conf.Configured"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.Partitioner"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.lib.partition.TotalOrderPartitioner"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapred.lib.InputSampler"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapred.lib.InputSampler.Sampler"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapred.lib.InputSampler.RandomSampler"/>
+<fullyQualifiedTypeName name="java.net.URI"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.io.Text"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.util.LineReader"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.mapreduce.lib.input.FileSplit"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.conf.Configuration"/>
+<fullyQualifiedTypeName name="org.apache.hadoop.fs.Path"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+</qualifiedTypeNameHistroy>
