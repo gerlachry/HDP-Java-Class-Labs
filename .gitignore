@@ -1,6 +1,10 @@
 .metadata*
 *.class
-*.gradle*
+*.gradle
 *.jar
-*eclipse*
-*build*
+*eclipse
+/build*
+*.settings
+bin*
+*.html
+*MANIFEST*
