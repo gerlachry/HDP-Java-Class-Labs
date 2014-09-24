@@ -8,7 +8,10 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.compress.CompressionCodec;
+import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.MRJobConfig;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -64,6 +67,12 @@ public class CompressDemoJob extends Configured implements Tool {
 		Job job = Job.getInstance(getConf(), "CompressJob");
 		Configuration conf = job.getConfiguration();
 		conf.set("searchString", args[0]);
+		// setting compression w/ snappy mapper and reducer outputs
+		conf.setBoolean(MRJobConfig.MAP_OUTPUT_COMPRESS, true);
+		conf.setClass(MRJobConfig.MAP_OUTPUT_COMPRESS_CODEC, SnappyCodec.class, CompressionCodec.class);
+		conf.setBoolean(FileOutputFormat.COMPRESS, true);
+		conf.setClass(FileOutputFormat.COMPRESS_CODEC, SnappyCodec.class, CompressionCodec.class);
+		
 		job.setJarByClass(CompressDemoJob.class);
 		
 		Path out = new Path("logresults");

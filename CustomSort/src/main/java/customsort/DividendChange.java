@@ -52,7 +52,7 @@ public class DividendChange implements Writable {
 	
 	@Override
 	public String toString() {
-		return symbol + "\t" + date + "\r" + change;
+		return symbol + "\t" + date + "\t" + change;
 	}
 
 }

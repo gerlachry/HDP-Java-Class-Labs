@@ -5,9 +5,15 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.WritableComparator;
 
 public class Stock implements WritableComparable<Stock> {
-
+	
+	// setup the raw comparator once for the application
+	static {
+		WritableComparator.define(Stock.class, new StockComparator());
+	}
+	
 	private String symbol;
 	private String date;
 	
