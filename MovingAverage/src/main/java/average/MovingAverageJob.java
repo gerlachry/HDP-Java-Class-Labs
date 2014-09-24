@@ -34,7 +34,18 @@ public class MovingAverageJob extends Configured implements Tool {
 			for (DoubleWritable value : values){
 				StockWindow window = new StockWindow(key.toString());
 				windows.add(window);
+				for (StockWindow w : windows){
+					w.addPrice(value.get(), key.getSymbol());
+				}
+				if(windows.size() >= WINDOW_SIZE){
+					StockWindow w = windows.removeFirst();
+					outputKey.set(w.toString());
+					outputValue.set(w.getAverage());
+					context.write(outputKey, outputValue);
+				}
 			}
+			windows.clear();
+
 		}
 	}
 
