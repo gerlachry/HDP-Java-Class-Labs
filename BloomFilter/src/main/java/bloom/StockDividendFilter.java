@@ -4,7 +4,11 @@ import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.util.Hash;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
@@ -30,11 +34,13 @@ public class StockDividendFilter extends Configured implements Tool {
 	public static class BloomMapper extends Mapper<LongWritable, Text, NullWritable, BloomFilter> {
 		private String stockSymbol;
 		private NullWritable outputKey = NullWritable.get();
-
+		private BloomFilter outputValue;
 		
 		@Override
 		protected void setup(Context context) throws IOException, InterruptedException {
 			stockSymbol = context.getConfiguration().get("stockSymbol");
+			outputValue = new BloomFilter(10000, 20, Hash.MURMUR_HASH);
+			
 		}
 
 		@Override
@@ -42,6 +48,7 @@ public class StockDividendFilter extends Configured implements Tool {
 				throws IOException, InterruptedException {
 			String [] words = StringUtils.split(value.toString(),'\\',',');
 			if(words[1].equals(stockSymbol)) {
+				// create bloomfilter for our stock symbol, key is a null
 				Stock stock = new Stock(words[1], words[2]);
 				Key stockKey = new Key(stock.toString().getBytes());
 				outputValue.add(stockKey);
@@ -51,28 +58,39 @@ public class StockDividendFilter extends Configured implements Tool {
 
 		@Override
 		protected void cleanup(Context context) throws IOException, InterruptedException {
-
+			// write out bloomfilter
+			context.write(outputKey, outputValue);
 		}	
 	}
 	
 	public static class BloomReducer extends Reducer<NullWritable, BloomFilter, NullWritable, NullWritable> {
 		
+		private BloomFilter allValues;
+		
 		@Override
 		protected void setup(Context context) throws IOException,
 				InterruptedException {
-
+			allValues = new BloomFilter(10000, 20, Hash.MURMUR_HASH);
 		}
 
 		@Override
 		protected void reduce(NullWritable key, Iterable<BloomFilter> values, Context context)
 				throws IOException, InterruptedException {			
-
+			for (BloomFilter filter : values){
+				// collect all bloomfilters, no output from reduce
+				allValues.or(filter);
+			}
 		}
 
 		@Override
 		protected void cleanup(Context context) throws IOException,
 				InterruptedException {
-
+			// write all bloom filters to file to use later
+			Configuration conf = context.getConfiguration();
+			Path path = new Path(FILTER_FILE);
+			FSDataOutputStream out = path.getFileSystem(conf).create(path);
+			allValues.write(out);
+			out.close();
 		}
 	}
 	
@@ -88,8 +106,14 @@ public class StockDividendFilter extends Configured implements Tool {
 			Path filter_file = new Path(FILTER_FILE);
 			stockSymbol = context.getConfiguration().get("stockSymbol");
 
-			//Initialize the dividends field
-
+			//Initialize the dividends field and open bloom filter file created in first MR job
+			dividends = new BloomFilter(10000, 20, Hash.MURMUR_HASH);
+			FileSystem fs = FileSystem.get(context.getConfiguration());
+			FSDataInputStream in = fs.open(filter_file);
+			// readFields desearlizes the file and stores in dividends
+			dividends.readFields(in);
+			in.close();
+			
 		}
 		
 		@Override
