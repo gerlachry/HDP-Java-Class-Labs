@@ -29,7 +29,7 @@ import org.apache.hadoop.util.bloom.BloomFilter;
 import org.apache.hadoop.util.bloom.Key;
 
 public class StockDividendFilter extends Configured implements Tool {
-	private static final String FILTER_FILE = "hdfs://sandbox:8020/user/train/filters/dividendfilter";
+	private static final String FILTER_FILE = "filters/dividendfilter";
 
 	public static class BloomMapper extends Mapper<LongWritable, Text, NullWritable, BloomFilter> {
 		private String stockSymbol;
@@ -123,7 +123,13 @@ public class StockDividendFilter extends Configured implements Tool {
 				outputKey.setSymbol(words[1]);
 				outputKey.setDate(words[2]);
 				//Instantiate a Bloom Key using outputKey, then check for membership in the Bloom filter
-
+				// incoming data format :
+				// NYSE,BGY,2010-02-08,10.25,10.39,9.94,10.28,600900,10.28
+				Key thisKey = new Key(outputKey.toString().getBytes());
+				if(dividends.membershipTest(thisKey)) {
+					outputValue.set( Double.parseDouble(words[6]));
+					context.write(outputKey,outputValue);
+				}
 			}
 		}
 	}
